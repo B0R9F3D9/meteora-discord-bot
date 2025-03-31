@@ -67,8 +67,36 @@ export default async function tokenPools(
 		sortTimeframe as SortTimeframeType,
 		token,
 	);
-	if (meteoraPools.length === 0)
-		return await interaction.editReply('No pools found for provided token');
+	if (meteoraPools.length === 0) {
+		const embed = new EmbedBuilder()
+			.setColor(0x7f3de3)
+			.setTitle('No pools found')
+			.addFields([
+				{
+					name: 'Token',
+					value: `\`\`\`${token}\`\`\``,
+					inline: true,
+				},
+			])
+			.setTimestamp();
+
+		const components =
+			new ActionRowBuilder<MessageActionRowComponentBuilder>().addComponents(
+				new ButtonBuilder()
+					.setLabel('Refresh')
+					.setCustomId(
+						`token-pools:${sortBy}:${sortOrder}:${sortTimeframe}:${page}:${pageSize}`,
+					)
+					.setStyle(ButtonStyle.Primary)
+					.setEmoji('🔄'),
+			);
+
+		return await interaction.editReply({
+			embeds: [embed],
+			components: [components],
+		});
+	}
+
 	sortMeteoraPools(
 		meteoraPools,
 		sortBy as SortByType,

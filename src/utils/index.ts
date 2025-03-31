@@ -4,7 +4,6 @@ import type {
 	SortByType,
 	SortOrderType,
 	SortTimeframeKeyType,
-	SortTimeframeType,
 } from '@/types/meteora';
 import type { RugData } from '@/types/rug';
 
@@ -35,7 +34,7 @@ export function formatPrice(num: number): string {
 
 	const fixedNum = num.toFixed(10);
 	const parts = fixedNum.split('.');
-	const [integerPart, decimalPart] = parts;
+	const [_, decimalPart] = parts;
 
 	const leadingZerosMatch = decimalPart.match(/^0+/);
 	const leadingZeros = leadingZerosMatch ? leadingZerosMatch[0].length : 0;
@@ -112,6 +111,7 @@ export function generatePoolString(
 	dexPair: DexPair | undefined,
 ) {
 	return [
+		`**Pair**: ${meteoraPair.name}`,
 		`**Bin Step:** ${meteoraPair.bin_step}`,
 		'**TVL:** ' +
 			(dexPair?.liquidity?.usd !== undefined
